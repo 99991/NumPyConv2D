@@ -24,3 +24,10 @@ output = conv2d(input, weight)
 output = conv2d(input, weight, bias=np.random.rand(c_out), stride=(2, 2),
     padding=(0, 0), dilation=(2, 2), groups=1, padding_mode="replicate")
 ```
+
+#### Notes
+
+* The tests compare this implementation with the output of PyTorch's `Conv2d` layer and might trigger the following warning, which is caused by PyTorch and can be safely ignored: `/home/user/.local/lib/python3.10/site-packages/torch/nn/modules/conv.py:459: UserWarning: Using padding='same' with even kernel lengths and odd dilation may require a zero-padded copy of the input be created (Triggered internally at ../aten/src/ATen/native/Convolution.cpp:1003.)
+  return F.conv2d(input, weight, bias, self.stride,`
+* This function actually computes a correlation instead of a convolution since the kernel is not flipped (same as PyTorch and other popular deep learning frameworks). If you want a "real" convolution, you can flip the kernel weights: `weight[:, :, ::-1, ::-1]`
+* If you want a *fast* `conv2d` implementation, use PyTorch instead. The main purpose of *this* implementation is that it is lightweight.
