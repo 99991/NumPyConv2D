@@ -37,8 +37,8 @@ def conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1, 
     sh, sw = stride
     dilated_kh = (kh - 1) * dh + 1
     dilated_kw = (kw - 1) * dw + 1
-    assert c_in % groups == 0
-    assert c_out % groups == 0
+    assert c_in % groups == 0, f"Number of input channels ({c_in}) not divisible by groups ({groups})."
+    assert c_out % groups == 0, f"Number of output channels ({c_out}) not divisible by groups ({groups})."
     c_in_group = c_in // groups
     c_out_group = c_out // groups
     kernel_shape = (c_in_group, dilated_kh, dilated_kw)
